@@ -1,0 +1,31 @@
+services:
+  wordpress:
+    image: wordpress:latest    # Use the latest WordPress image
+    ports:
+      - "80:80"
+    environment:      # Set environment variables for WordPress
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: root@123
+      WORDPRESS_DB_NAME: wordpressdb
+    depends_on:     # Ensure WordPress starts after the database
+      - db
+    networks:       # Connect to the defined network
+      - net1
+
+  db:     
+    image: mysql    # Use the latest MySQL image
+    environment:    # Set environment variables for MySQL
+      MYSQL_ROOT_PASSWORD: root@123
+      MYSQL_DATABASE: wordpressdb
+    networks:       # Connect to the defined network
+      - net1
+    volumes:    # Persist database data
+      - val1:/var/lib/mysql
+
+networks:   # Define a custom network
+  net1:
+    driver: bridge
+
+volumes:  # Define a volume for database persistence
+  val1:
